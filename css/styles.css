@@ -1,0 +1,54 @@
+body {
+    background-color: rgba(0, 0, 0, 0.925);
+}
+
+/* Estilos de ejemplo para las cards */
+.card-container-carrito,
+.card-container-juegos {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    color: ghostwhite;
+    background-color: rgba(0, 136, 255, 0.212);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    padding: 20px;
+    flex: 1 0 200px;
+    min-width: 200px;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* Estilo para títulos */
+.titulo-div {
+    width: 100%;
+    color: ghostwhite;
+}
+
+/* Estilo para botones de agregar al carrito */
+button.agregar {
+    background-color: green;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Estilo para botones de quitar del carrito */
+button.quitar {
+    background-color: red;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
