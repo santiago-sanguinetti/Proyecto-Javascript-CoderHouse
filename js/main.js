@@ -74,7 +74,7 @@ function RenderJuegos(arrayJuegos) {
 }
 
 // ------------------- Renderizar div de carrito -------------------
-function RenderCarrito(arrayProductosEnCarrito) {
+function RenderCarrito(arrayProductosEnCarrito = []) {
     // Limpiar el contenido del contenedor
     let existeCardContainer = document.querySelector(".card-container-carrito");
 
@@ -170,7 +170,9 @@ function calcularMontoTotalCarrito() {
 
 // ------------------- Funciones LocalStorage -------------------
 function obtenerCarrito() {
-    return JSON.parse(localStorage.getItem("carrito"));
+    // Devuelvo el carrito o un array vacío si en el local storage no hay carrito
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    return carrito;
 }
 
 function guardarLocalStorage(clave, valor) {
