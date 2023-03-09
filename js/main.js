@@ -31,6 +31,9 @@ function agregarJuegos() {
 
 // ------------------- Renderizar div de juegos -------------------
 function RenderJuegos(arrayJuegos) {
+    // Salgo en el caso que no haya array de juegos
+    if (!arrayJuegos) return;
+
     // Creo el contenedor para las cards
     const cardContainer = document.createElement("div");
     cardContainer.classList.add("card-container-juegos");
@@ -74,7 +77,7 @@ function RenderJuegos(arrayJuegos) {
 }
 
 // ------------------- Renderizar div de carrito -------------------
-function RenderCarrito(arrayProductosEnCarrito = []) {
+function RenderCarrito(arrayProductosEnCarrito) {
     // Limpiar el contenido del contenedor
     let existeCardContainer = document.querySelector(".card-container-carrito");
 
@@ -94,40 +97,40 @@ function RenderCarrito(arrayProductosEnCarrito = []) {
 
     document.body.appendChild(cardContainer);
 
-    if (arrayProductosEnCarrito != null) {
-        // Recorro los productos y renderizo las cards
-        arrayProductosEnCarrito.forEach((producto, index) => {
-            // Creo una card
-            const card = document.createElement("div");
-            card.classList.add("card");
+    if (!arrayProductosEnCarrito) return;
 
-            // Agrego el nombre del juego
-            const nombre = document.createElement("h2");
-            nombre.textContent = producto.nombre;
-            card.appendChild(nombre);
+    // Recorro los productos y renderizo las cards
+    arrayProductosEnCarrito.forEach((producto, index) => {
+        // Creo una card
+        const card = document.createElement("div");
+        card.classList.add("card");
 
-            // Agrego el precio del juego
-            const precio = document.createElement("h2");
-            precio.textContent = `$${producto.precio}`;
-            card.appendChild(precio);
+        // Agrego el nombre del juego
+        const nombre = document.createElement("h2");
+        nombre.textContent = producto.nombre;
+        card.appendChild(nombre);
 
-            // Agrego un botón para quitar del carrito
-            const btnQuitar = document.createElement("button");
-            btnQuitar.textContent = "Eliminar del carrito";
-            btnQuitar.classList.add("quitar");
-            btnQuitar.setAttribute("data-index", index);
-            btnQuitar.addEventListener("click", quitarDelCarrito);
-            card.appendChild(btnQuitar);
+        // Agrego el precio del juego
+        const precio = document.createElement("h2");
+        precio.textContent = `$${producto.precio}`;
+        card.appendChild(precio);
 
-            // Agrego la card al container
-            cardContainer.appendChild(card);
-        });
-        // Agrego un título para el monto total del carrito
-        const montoTotal = document.createElement("h2");
-        montoTotal.classList.add("titulo-div");
-        montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
-        cardContainer.appendChild(montoTotal);
-    }
+        // Agrego un botón para quitar del carrito
+        const btnQuitar = document.createElement("button");
+        btnQuitar.textContent = "Eliminar del carrito";
+        btnQuitar.classList.add("quitar");
+        btnQuitar.setAttribute("data-index", index);
+        btnQuitar.addEventListener("click", quitarDelCarrito);
+        card.appendChild(btnQuitar);
+
+        // Agrego la card al container
+        cardContainer.appendChild(card);
+    });
+    // Agrego un título para el monto total del carrito
+    const montoTotal = document.createElement("h2");
+    montoTotal.classList.add("titulo-div");
+    montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
+    cardContainer.appendChild(montoTotal);
 }
 
 function agregarAlCarrito(index) {
@@ -170,8 +173,14 @@ function calcularMontoTotalCarrito() {
 
 // ------------------- Funciones LocalStorage -------------------
 function obtenerCarrito() {
-    // Devuelvo el carrito o un array vacío si en el local storage no hay carrito
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    // Leo el carrito del local storage
+    let carrito = JSON.parse(localStorage.getItem("carrito"));
+
+    // Comprueba que el carrito sea un array, si no lo es, devuelve uno vacío
+    if (!Array.isArray(carrito)) {
+        return [];
+    }
+
     return carrito;
 }
 
@@ -179,10 +188,11 @@ function guardarLocalStorage(clave, valor) {
     localStorage.setItem(clave, JSON.stringify(valor));
 }
 
+// Estas funciones por ahora no las utilizo
 function eliminarItemLocalStorage(clave) {
     localStorage.removeItem(clave);
 }
 
-function limpiarLocalStorage() {
+function limpiarTodoLocalStorage() {
     localStorage.clear();
 }
