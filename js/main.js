@@ -122,6 +122,7 @@ function RenderCarrito(arrayProductosEnCarrito) {
         cardContainer.appendChild(card);
     });
 
+    // Agrego un título para el monto total del carrito
     const montoTotal = document.createElement("h2");
     montoTotal.classList.add("titulo-div");
     montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
@@ -137,18 +138,22 @@ function agregarAlCarrito(index) {
     // Agrego el producto al carrito
     carrito.push(producto);
 
-    console.log(`Producto agregado al carrito: ${producto.nombre}`);
-    console.log("Contenido del carrito:", carrito);
+    // Guardo el carrito en el localStorage
     guardarLocalStorage("carrito", carrito);
 }
 
 function quitarDelCarrito(event) {
-    const index = event.target.getAttribute("data-index");
     let carrito = obtenerCarrito();
+
+    // Tomo el index del objeto en donde ocurrió el evento para identificarlo en el array
+    const index = event.target.getAttribute("data-index");
+
+    // Remuevo el objeto en la posición index del array
     carrito.splice(index, 1);
-    console.log(`Producto quitado del carrito.`);
-    console.log("Contenido del carrito:", carrito);
+
+    // Guardo el carrito en el local storage
     guardarLocalStorage("carrito", carrito);
+
     RenderCarrito(carrito);
 }
 
