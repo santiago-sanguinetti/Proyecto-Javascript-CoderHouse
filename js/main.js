@@ -94,39 +94,40 @@ function RenderCarrito(arrayProductosEnCarrito) {
 
     document.body.appendChild(cardContainer);
 
-    // Recorro los productos y renderizo las cards
-    arrayProductosEnCarrito.forEach((producto, index) => {
-        // Creo una card
-        const card = document.createElement("div");
-        card.classList.add("card");
+    if (arrayProductosEnCarrito != null) {
+        // Recorro los productos y renderizo las cards
+        arrayProductosEnCarrito.forEach((producto, index) => {
+            // Creo una card
+            const card = document.createElement("div");
+            card.classList.add("card");
 
-        // Agrego el nombre del juego
-        const nombre = document.createElement("h2");
-        nombre.textContent = producto.nombre;
-        card.appendChild(nombre);
+            // Agrego el nombre del juego
+            const nombre = document.createElement("h2");
+            nombre.textContent = producto.nombre;
+            card.appendChild(nombre);
 
-        // Agrego el precio del juego
-        const precio = document.createElement("h2");
-        precio.textContent = `$${producto.precio}`;
-        card.appendChild(precio);
+            // Agrego el precio del juego
+            const precio = document.createElement("h2");
+            precio.textContent = `$${producto.precio}`;
+            card.appendChild(precio);
 
-        // Agrego un botón para quitar del carrito
-        const btnQuitar = document.createElement("button");
-        btnQuitar.textContent = "Eliminar del carrito";
-        btnQuitar.classList.add("quitar");
-        btnQuitar.setAttribute("data-index", index);
-        btnQuitar.addEventListener("click", quitarDelCarrito);
-        card.appendChild(btnQuitar);
+            // Agrego un botón para quitar del carrito
+            const btnQuitar = document.createElement("button");
+            btnQuitar.textContent = "Eliminar del carrito";
+            btnQuitar.classList.add("quitar");
+            btnQuitar.setAttribute("data-index", index);
+            btnQuitar.addEventListener("click", quitarDelCarrito);
+            card.appendChild(btnQuitar);
 
-        // Agrego la card al container
-        cardContainer.appendChild(card);
-    });
-
-    // Agrego un título para el monto total del carrito
-    const montoTotal = document.createElement("h2");
-    montoTotal.classList.add("titulo-div");
-    montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
-    cardContainer.appendChild(montoTotal);
+            // Agrego la card al container
+            cardContainer.appendChild(card);
+        });
+        // Agrego un título para el monto total del carrito
+        const montoTotal = document.createElement("h2");
+        montoTotal.classList.add("titulo-div");
+        montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
+        cardContainer.appendChild(montoTotal);
+    }
 }
 
 function agregarAlCarrito(index) {
@@ -180,6 +181,6 @@ function eliminarItemLocalStorage(clave) {
     localStorage.removeItem(clave);
 }
 
-function borrarLocalStorage() {
+function limpiarLocalStorage() {
     localStorage.clear();
 }
