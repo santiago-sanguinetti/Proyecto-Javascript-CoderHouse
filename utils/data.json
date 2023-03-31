@@ -1,0 +1,19 @@
+{
+    "juegos": [
+        {
+            "nombre": "Red Dead Redemption 2",
+            "precio": 59.99,
+            "plataforma": ["PC", "PS", "XBOX"]
+        },
+        {
+            "nombre": "Hades",
+            "precio": 29.99,
+            "plataforma": ["PC", "PS", "XBOX"]
+        },
+        {
+            "nombre": "The Witcher 3",
+            "precio": 39.99,
+            "plataforma": ["PC"]
+        }
+    ]
+}

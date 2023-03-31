@@ -1,36 +1,50 @@
 const juegos = [];
 
-class Juego {
-    constructor(nombre, plataforma, precio) {
-        this.nombre = nombre;
-        this.plataforma = plataforma;
-        this.precio = precio;
-    }
-}
-
 iniciarApp();
 
 function iniciarApp() {
-    agregarJuegos();
-    RenderJuegos(juegos);
-    RenderCarrito(obtenerCarrito());
+    RenderNavBar();
+    cargarJuegos()
+        .then(() => RenderJuegos(juegos))
+        .then(() => RenderCarrito(obtenerCarrito()))
+        .catch((err) => mostrarToastError(err.message));
 }
 
-function agregarJuegos() {
-    const theWitcher3PC = new Juego("The Witcher 3", "PC", 39.99);
-    const redDeadRedemption2PC = new Juego(
-        "Red Dead Redemption 2",
-        "PC",
-        59.99
-    );
-    const hadesPC = new Juego("Hades", "PC", 24.99);
+// ------------------- Renderizar navbar -------------------
+// La navbar es genérica, los botones de esta no tienen ninguna funcionalidad por ahora
+function RenderNavBar() {
+    // Creo la barra de navegación
+    const nav = document.createElement("nav");
 
-    juegos.push(theWitcher3PC, redDeadRedemption2PC, hadesPC);
-    console.log("Juegos:", juegos);
+    // Creo el contenedor para el logo
+    const logoContainer = document.createElement("div");
+    logoContainer.innerHTML = "<h1>Vapour Games</h1>";
+
+    // Creo la lista de enlaces
+    const enlaces = ["Inicio", "Acerca de", "Contacto"];
+    const enlacesList = document.createElement("ul");
+
+    // Agrego cada enlace a la lista
+    enlaces.forEach((enlace) => {
+        const enlaceItem = document.createElement("li");
+        const enlaceLink = document.createElement("a");
+        enlaceLink.textContent = enlace;
+        enlaceLink.href = "#";
+        enlaceItem.appendChild(enlaceLink);
+        enlacesList.appendChild(enlaceItem);
+    });
+
+    // Agrego el contenedor del logo y la lista de enlaces a la barra de navegación
+    nav.appendChild(logoContainer);
+    nav.appendChild(enlacesList);
+
+    // Agrego la barra de navegación al DOM
+    document.body.insertBefore(nav, document.body.firstChild);
 }
 
 // ------------------- Renderizar div de juegos -------------------
 function RenderJuegos(arrayJuegos) {
+    console.log(arrayJuegos);
     // Salgo en el caso que no haya array de juegos
     if (!arrayJuegos) return;
 
@@ -77,7 +91,7 @@ function RenderJuegos(arrayJuegos) {
 }
 
 // ------------------- Renderizar div de carrito -------------------
-function RenderCarrito(arrayProductosEnCarrito) {
+function RenderCarrito(arrayProductosEnCarrito = []) {
     // Limpiar el contenido del contenedor
     let existeCardContainer = document.querySelector(".card-container-carrito");
 
@@ -87,18 +101,17 @@ function RenderCarrito(arrayProductosEnCarrito) {
     }
     // Crear el contenedor para las cards
     const cardContainer = document.createElement("div");
+    cardContainer.id = "carrito";
     cardContainer.classList.add("card-container-carrito");
 
     // Agrego un título
     const titulo = document.createElement("h2");
     titulo.classList.add("titulo-div");
-    titulo.textContent = "Carrito:";
     cardContainer.appendChild(titulo);
 
     document.body.appendChild(cardContainer);
 
     if (!arrayProductosEnCarrito) return;
-
     // Recorro los productos y renderizo las cards
     arrayProductosEnCarrito.forEach((producto, index) => {
         // Creo una card
@@ -126,11 +139,17 @@ function RenderCarrito(arrayProductosEnCarrito) {
         // Agrego la card al container
         cardContainer.appendChild(card);
     });
+
     // Agrego un título para el monto total del carrito
     const montoTotal = document.createElement("h2");
     montoTotal.classList.add("titulo-div");
     montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
     cardContainer.appendChild(montoTotal);
+    const btnLimpiar = document.createElement("button");
+    btnLimpiar.textContent = "Vaciar el carrito";
+    btnLimpiar.classList.add("quitar");
+    btnLimpiar.addEventListener("click", limpiarTodoElCarrito);
+    cardContainer.appendChild(btnLimpiar);
 }
 
 function agregarAlCarrito(index) {
@@ -144,6 +163,11 @@ function agregarAlCarrito(index) {
 
     // Guardo el carrito en el localStorage
     guardarLocalStorage("carrito", carrito);
+
+    swal({
+        text: `${producto.nombre} fue agregado al carrito.`,
+        icon: "success",
+    });
 }
 
 function quitarDelCarrito(event) {
@@ -159,6 +183,21 @@ function quitarDelCarrito(event) {
     guardarLocalStorage("carrito", carrito);
 
     RenderCarrito(carrito);
+}
+
+function limpiarTodoElCarrito() {
+    swal("¿Estás seguro que deseas quitar todos tus productos del carrito?", {
+        dangerMode: true,
+        buttons: ["Cancelar", "Sí, estoy seguro."],
+    }).then(function (isConfirm) {
+        if (isConfirm) {
+            swal({
+                title: "¡Carrito eliminado!",
+                text: "El carrito fue vaciado correctamente.",
+                icon: "success",
+            }).then(limpiarTodoLocalStorage(), RenderCarrito());
+        }
+    });
 }
 
 function calcularMontoTotalCarrito() {
@@ -181,6 +220,9 @@ function obtenerCarrito() {
         return [];
     }
 
+    // Filtra los valores nulos del array
+    carrito = carrito.filter((producto) => producto != null);
+
     return carrito;
 }
 
@@ -188,11 +230,35 @@ function guardarLocalStorage(clave, valor) {
     localStorage.setItem(clave, JSON.stringify(valor));
 }
 
-// Estas funciones por ahora no las utilizo
 function eliminarItemLocalStorage(clave) {
+    //esta función no tiene utilidad por el momento
     localStorage.removeItem(clave);
 }
 
 function limpiarTodoLocalStorage() {
     localStorage.clear();
+}
+
+async function cargarJuegos() {
+    await fetch("./utils/data.json")
+        //fulfilled
+        .then((response) => response.json())
+        .then((response) => agregarJuegos(response))
+        //rejected
+        .catch((err) => mostrarToastError(err.message));
+}
+
+function agregarJuegos(array) {
+    console.log(array);
+    array.juegos.forEach((juego) => {
+        console.log(juego);
+        juegos.push(juego);
+    });
+}
+
+function mostrarToastError(mensaje) {
+    swal({
+        text: `Error: ${mensaje}`,
+        icon: "error",
+    });
 }

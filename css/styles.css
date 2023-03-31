@@ -1,40 +1,20 @@
 body {
     background-color: rgba(0, 0, 0, 0.925);
-}
-
-/* Estilos de ejemplo para las cards */
-.card-container-carrito,
-.card-container-juegos {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.card {
-    color: ghostwhite;
-    background-color: rgba(0, 136, 255, 0.212);
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    margin: 10px;
-    padding: 20px;
-    flex: 1 0 200px;
-    min-width: 200px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 img {
     max-width: 100%;
 }
 
-/* Estilo para títulos */
 .titulo-div {
     width: 100%;
     color: ghostwhite;
 }
 
-/* Estilo para botones de agregar al carrito */
-button.agregar {
-    background-color: green;
-    color: white;
+button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
@@ -42,13 +22,97 @@ button.agregar {
     cursor: pointer;
 }
 
-/* Estilo para botones de quitar del carrito */
-button.quitar {
-    background-color: red;
+button.agregar {
+    background-color: #28a745;
     color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+}
+
+button.quitar {
+    background-color: #dc3545;
+    color: white;
+}
+
+button.agregar:hover {
+    background-color: #218838;
+}
+
+button.quitar:hover {
+    background-color: #c82333;
+}
+
+/* Estilos del navbar */
+nav {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+nav h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+.card-container-carrito,
+.card-container-juegos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.card {
+    color: ghostwhite;
+    background-color: rgba(0, 68, 128, 0.212);
+    border: 1px solid #000000;
+    margin: 10px;
+    padding: 20px;
+    flex: 1 0 300px;
+    min-width: 200px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    width: calc(33.33% - 10px);
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px 5px 0 0;
+}
+
+.card h2 {
+    margin: 10px;
+    font-size: 18px;
 }
