@@ -1,5 +1,5 @@
+// ------------------- Inicialización -------------------
 const juegos = [];
-
 iniciarApp();
 
 function iniciarApp() {
@@ -8,6 +8,14 @@ function iniciarApp() {
         .then(() => RenderJuegos(juegos))
         .then(() => RenderCarrito(obtenerCarrito()))
         .catch((err) => mostrarToastError(err.message));
+}
+
+// ------------------- Mostrar errores con librería Sweet Alerts -------------------
+function mostrarToastError(mensaje) {
+    swal({
+        text: `Error: ${mensaje}`,
+        icon: "error",
+    });
 }
 
 // ------------------- Renderizar navbar -------------------
@@ -44,7 +52,6 @@ function RenderNavBar() {
 
 // ------------------- Renderizar div de juegos -------------------
 function RenderJuegos(arrayJuegos) {
-    console.log(arrayJuegos);
     // Salgo en el caso que no haya array de juegos
     if (!arrayJuegos) return;
 
@@ -106,12 +113,15 @@ function RenderCarrito(arrayProductosEnCarrito = []) {
 
     // Agrego un título
     const titulo = document.createElement("h2");
+    titulo.textContent = "Carrito:";
     titulo.classList.add("titulo-div");
     cardContainer.appendChild(titulo);
 
     document.body.appendChild(cardContainer);
 
+    //En caso de que haya un problema con el array
     if (!arrayProductosEnCarrito) return;
+
     // Recorro los productos y renderizo las cards
     arrayProductosEnCarrito.forEach((producto, index) => {
         // Creo una card
@@ -145,6 +155,7 @@ function RenderCarrito(arrayProductosEnCarrito = []) {
     montoTotal.classList.add("titulo-div");
     montoTotal.textContent = `Total: $${calcularMontoTotalCarrito()}`;
     cardContainer.appendChild(montoTotal);
+
     const btnLimpiar = document.createElement("button");
     btnLimpiar.textContent = "Vaciar el carrito";
     btnLimpiar.classList.add("quitar");
@@ -152,6 +163,7 @@ function RenderCarrito(arrayProductosEnCarrito = []) {
     cardContainer.appendChild(btnLimpiar);
 }
 
+// ------------------- Agregar y quitar elementos del carrito -------------------
 function agregarAlCarrito(index) {
     let carrito = obtenerCarrito();
 
@@ -164,6 +176,7 @@ function agregarAlCarrito(index) {
     // Guardo el carrito en el localStorage
     guardarLocalStorage("carrito", carrito);
 
+    //Sweet alert
     swal({
         text: `${producto.nombre} fue agregado al carrito.`,
         icon: "success",
@@ -186,6 +199,7 @@ function quitarDelCarrito(event) {
 }
 
 function limpiarTodoElCarrito() {
+    //Abre un modal que pide confirmación, al confirmar borra los elementos del carrito
     swal("¿Estás seguro que deseas quitar todos tus productos del carrito?", {
         dangerMode: true,
         buttons: ["Cancelar", "Sí, estoy seguro."],
@@ -199,7 +213,6 @@ function limpiarTodoElCarrito() {
         }
     });
 }
-
 function calcularMontoTotalCarrito() {
     let carrito = obtenerCarrito();
     let montoTotal = 0;
@@ -239,6 +252,7 @@ function limpiarTodoLocalStorage() {
     localStorage.clear();
 }
 
+// ------------------- JSON fetch -------------------
 async function cargarJuegos() {
     await fetch("./utils/data.json")
         //fulfilled
@@ -249,16 +263,7 @@ async function cargarJuegos() {
 }
 
 function agregarJuegos(array) {
-    console.log(array);
     array.juegos.forEach((juego) => {
-        console.log(juego);
         juegos.push(juego);
-    });
-}
-
-function mostrarToastError(mensaje) {
-    swal({
-        text: `Error: ${mensaje}`,
-        icon: "error",
     });
 }
